@@ -2,22 +2,45 @@ import { useState, useEffect } from 'react';
 import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { Text, View, HintText } from './Themed';
 import { useThemeColor } from "./Themed";
+import { supabase } from "../supabase";
+import { Database } from '../types';
+
+type Event = Database['public']['Tables']['events']['Row']
 
 export default function EventList(props) {
   const { onItemPress, ...otherProps } = props;
-  const data = [
-    { id: '1', icon: "💰", title: "Received Revenue", description: "received $25 for subscription starter" },
-    { id: '2', icon: "✍️", title: "Plan Change", description: "upgraded plan to starter from free" },
-    { id: '3', icon: "📝", title: "Address Update", description: "Updated their address" },
-    { id: '4', icon: "🥳", title: "Address Created", description: "upgraded plan to starter from free" },
-  ];
+  const [events, setEvents] = useState<Array<Event>>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchData = async () => {
+    let { data: events, error } = await supabase
+      .from('events')
+      .select('*');
+
+    if (error) console.log('error', error);
+    else setEvents(events!);
+    setLoading(false);
+
+    return events;
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  if (loading) return (<Text>Loading...</Text>);
 
   return (
-    <FlatList style={styles.List} data={data} renderItem={({ item, index }) => {
-      return (
-        <Item item={item} onItemPress={onItemPress} />
-      );
-    }} />
+    <FlatList
+      style={styles.List}
+      data={events}
+      keyExtractor={(item) => item.id.toString()}
+      renderItem={({ item, index }) => {
+        return (
+          <Item item={item} onItemPress={onItemPress} />
+        );
+      }
+      } />
   );
 }
 
