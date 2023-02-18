@@ -126,14 +126,14 @@ function BottomTabNavigator() {
           tabBarIcon: ({ color }) => <TabBarIcon name="address-book" solid color={color} />,
         }}
       />
-      <BottomTab.Screen
+      {/* <BottomTab.Screen
         name="Companies"
         component={CompaniesScreen}
         options={{
           title: 'Companies',
           tabBarIcon: ({ color }) => <TabBarIcon name="building" color={color} />,
         }}
-      />
+      /> */}
     </BottomTab.Navigator>
   );
 }

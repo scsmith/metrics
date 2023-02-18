@@ -1,25 +1,27 @@
 import { useEffect, useState } from 'react';
 import { Button, StyleSheet, TouchableOpacity } from 'react-native';
-import { View, Text, HintText, useThemeColor } from '../components/Themed';
+import { View, Text, HintText, useThemeColor, Error } from '../components/Themed';
 import { Customer } from '../types';
 import { underscoreToTitleCase } from '../lib/utilities';
-import { supabase } from '../supabase';
+import { PostgrestError, supabase } from '../supabase';
+import Avatar from '../components/Avatar';
 
 export default function EventDetailsScreen({ route, navigation }: any) {
   const { id }: { id: string; } = route.params;
-  console.log(id);
 
-  const [customer, setCustomer] = useState<Customer>([]);
+  const [customer, setCustomer] = useState<Customer | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<PostgrestError | null>(null);
 
   const fetchData = async () => {
     let { data: customer, error } = await supabase
       .from('customers')
       .select('*')
-      .eq('id', id);
+      .eq('id', id)
+      .single();
 
-    if (error || !customer) console.log('error', error);
-    else setCustomer(customer[0]);
+    if (error || !customer) setError(error);
+    else setCustomer(customer);
     setLoading(false);
 
     return customer;
@@ -27,15 +29,23 @@ export default function EventDetailsScreen({ route, navigation }: any) {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [id]);
 
-  if (loading) return (<Text>Loading...</Text>);
+  if (error) return (<Error error={error} onReload={fetchData} />);
+  if (loading || !customer) return (<Text>Loading...</Text>);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Customer: {customer.name}</Text>
-      <Text style={styles.description}>Email: {customer.email}</Text>
+      <Text style={styles.description}>Customer ID: {customer.id}</Text>
       <Text style={styles.description}>ID: {id}</Text>
+      <View style={styles.customer}>
+        <Avatar email={customer.email} name={customer.name} />
+        <Text style={styles.title}>{customer.name || customer.email}</Text>
+        <Text style={styles.description}>Email: {customer.email}</Text>
+        <HintText style={styles.description}>ID: {customer.id}</HintText>
+        <HintText style={styles.description}>Created: {customer.created_at}</HintText>
+        <HintText style={styles.description}>{JSON.stringify(customer.custom_data)}</HintText>
+      </View>
     </View>
   );
 }
@@ -43,12 +53,12 @@ export default function EventDetailsScreen({ route, navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // alignItems: 'center',
+    // alignevents: 'center',
     // justifyContent: 'center',
     paddingTop: 20,
     paddingBottom: 20,
   },
-  event: {
+  customer: {
     margin: 10,
     padding: 10,
     borderWidth: 1,
@@ -60,14 +70,10 @@ const styles = StyleSheet.create({
     // textAlign: 'center',
     fontSize: 20,
     fontWeight: 'bold',
+    marginVertical: 10,
   },
   description: {
     // textAlign: 'center',
-  },
-  customer: {
-    padding: 10,
-    margin: 10,
-    borderWidth: 1,
   },
   separator: {
     marginVertical: 30,

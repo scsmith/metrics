@@ -3,13 +3,13 @@
  * https://docs.expo.io/guides/color-schemes/
  */
 
-import { Text as DefaultText, View as DefaultView } from 'react-native';
+import { Button, Text as DefaultText, TouchableOpacity, View as DefaultView } from 'react-native';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 
 export function useThemeColor(
-  props: { light?: string; dark?: string },
+  props: { light?: string; dark?: string; },
   colorName: keyof typeof Colors.light & keyof typeof Colors.dark
 ) {
   const theme = useColorScheme();
@@ -42,6 +42,18 @@ export function HintText(props: TextProps) {
   const color = useThemeColor({ light: lightColor, dark: darkColor }, 'hint');
 
   return <DefaultText style={[{ color }, style]} {...otherProps} />;
+}
+
+export function Error(props: TextProps & { error: any; onReload: () => void; }) {
+  const { error, style, onReload, ...otherProps } = props;
+  const color = useThemeColor({}, 'hint');
+
+  return (
+    <TouchableOpacity style={[{ padding: 20, color }, style]} {...otherProps}>
+      <HintText style={{ marginBottom: 20 }}>{JSON.stringify(error)}</HintText>
+      <Button onPress={onReload} title="Reload" />
+    </TouchableOpacity >
+  );
 }
 
 export function View(props: ViewProps) {

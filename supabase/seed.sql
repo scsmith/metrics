@@ -3,7 +3,8 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 -- Create customers
 INSERT INTO "public"."customers" ("id", "key", "name", "email", "custom_data")
 VALUES
-    ('c5a9361a-506c-483c-a08b-38f8b573cd9a', 'customer1', 'Alice', 'alice@example.com', '{"plan": "pro", "recurring_revenue": 99.99}'),
+    ('c5a9361a-506c-483c-a08b-38f8b573cd9a', 'customer0', 'Steve Smith', 'steve@cloudmailin.com', '{"plan": "pro", "recurring_revenue": 99.99}'),
+    ('c5a9361a-506c-483c-a08b-38f8b573cd9b', 'customer1', 'Alice', 'alice@example.com', '{"plan": "pro", "recurring_revenue": 99.99}'),
     ('5c5d5e13-3278-44f1-a693-89db7a0356f2', 'customer2', NULL, 'bob@example.com', '{"plan": "basic", "recurring_revenue": 49.99}'),
     (gen_random_uuid(), 'customer3', 'Charlie', 'charlie@example.com', '{"plan": "enterprise", "recurring_revenue": 199.99}'),
     (gen_random_uuid(), 'customer4', 'David', 'david@example.com', '{"plan": "basic", "recurring_revenue": 49.99}'),

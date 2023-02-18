@@ -11,7 +11,7 @@ import { Database } from './supabase/types';
 export { Database };
 export type Customer = Database['public']['Tables']['customers']['Row'];
 export type Event = Database['public']['Tables']['events']['Row'];
-export type EventWithCustomers = Event & { customers: Customer; };
+export type EventWithCustomers = Event & { customers: Customer | null; };
 
 declare global {
   namespace ReactNavigation {
@@ -23,8 +23,8 @@ export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
   Modal: undefined;
   NotFound: undefined;
-  EventDetails: { id: string; item: EventWithCustomers; };
-  CustomerDetails: { id: string, item: Customer; };
+  EventDetails: { id: string; };
+  CustomerDetails: { id: string; };
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<

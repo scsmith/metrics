@@ -1,49 +1,79 @@
+import { useState, useEffect } from 'react';
 import { Button, StyleSheet, TouchableOpacity } from 'react-native';
-import { View, Text, HintText, useThemeColor } from '../components/Themed';
-import { EventWithCustomers } from '../types';
+
+import { EventWithCustomers, RootTabScreenProps } from '../types';
+import { View, Text, HintText, Error, useThemeColor } from '../components/Themed';
+import { PostgrestError, supabase } from '../supabase';
 import { underscoreToTitleCase } from '../lib/utilities';
 
 export default function EventDetailsScreen({ route, navigation }: any) {
-  const { id, item }: { id: string, item: EventWithCustomers; } = route.params;
-  console.log(id);
-  console.log(item);
+  const { id }: { id: string; } = route.params;
+
+  // console.log(id);
   // TODO add the abilty to customize lightColor and darkColor
   const borderColor = useThemeColor({}, 'eventBorderColor');
   const backgroundColor = useThemeColor({}, 'eventBackgroundColor');
 
+  const [event, setEvent] = useState<EventWithCustomers | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<PostgrestError | null>(null);
+
+  const fetchData = async () => {
+    let { data: event, error } = await supabase
+      .from('events')
+      .select('*, customers(*)')
+      .eq('id', id)
+      .single();
+
+    if (error || !event) setError(error);
+    else setEvent(event);
+    console.log(JSON.stringify(event));
+    setLoading(false);
+
+    return event;
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [id]);
+
   const onPress = () => {
-    console.log("Goto customers?");
+    console.log("Goto customers?", event.customer_id);
     // Go back to all events to prevent this page from being open if we come back
     navigation.popToTop();
     // Now head to the customers
     navigation.getParent()?.navigate('Root', {
-      'screen': 'Customers',
+      screen: 'Customers',
       params: {
         screen: 'CustomerDetails',
-        params: { id: item.customer_id },
+        params: { id: event.customer_id },
+        // initial false so that we show the customers screen on a back button
         initial: false,
       }
     });
   };
 
+  if (error || !event) return (<Error error={error} onReload={fetchData} />);
+  if (loading) return (<Text>Loading...</Text>);
+
   return (
     <View style={styles.container}>
-      {item.customer_id && item.customers && (
+      {event.customer_id && event.customers && (
         <TouchableOpacity style={[{ borderColor, backgroundColor }, styles.customer]} onPress={onPress}>
-          <Text style={styles.title}>{item.customers.name}</Text>
-          <Text style={styles.description}>Email: {item.customers.email}</Text>
-          <HintText style={styles.description}>Customer: {item.customer_id}</HintText>
+          <Text style={styles.title}>{event.customers.name}</Text>
+          <Text style={styles.description}>Email: {event.customers.email}</Text>
+          <HintText style={styles.description}>Customer: {event.customer_id}</HintText>
           {/* <Button title="Customer" onPress={onPress} /> */}
         </TouchableOpacity>
       )}
 
       <View style={[{ borderColor }, styles.event]}>
         <View>
-          <Text style={styles.title}>{underscoreToTitleCase(item.key)}</Text>
+          <Text style={styles.title}>{underscoreToTitleCase(event.key)}</Text>
 
         </View>
-        <Text style={styles.description}>{item.description}</Text>
-        <HintText style={styles.details}>{JSON.stringify(item.custom_data)}</HintText>
+        <Text style={styles.description}>{event.description}</Text>
+        <HintText style={styles.details}>{JSON.stringify(event.custom_data)}</HintText>
         <HintText style={styles.description}>ID: {id}</HintText>
       </View>
     </View>
@@ -53,7 +83,7 @@ export default function EventDetailsScreen({ route, navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // alignItems: 'center',
+    // alignevents: 'center',
     // justifyContent: 'center',
     paddingTop: 20,
     paddingBottom: 20,
