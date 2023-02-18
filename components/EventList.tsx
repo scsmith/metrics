@@ -3,21 +3,20 @@ import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { Text, View, HintText } from './Themed';
 import { useThemeColor } from "./Themed";
 import { supabase } from "../supabase";
-import { Database } from '../types';
+import { EventWithCustomers } from '../types';
+import { underscoreToTitleCase } from '../lib/utilities';
 
-type Event = Database['public']['Tables']['events']['Row']
-
-export default function EventList(props) {
+export default function EventList(props: any) {
   const { onItemPress, ...otherProps } = props;
-  const [events, setEvents] = useState<Array<Event>>([]);
+  const [events, setEvents] = useState<Array<EventWithCustomers>>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
     let { data: events, error } = await supabase
       .from('events')
-      .select('*');
+      .select('*, customers(id, name, email)');
 
-    if (error) console.log('error', error);
+    if (error || !events) console.log('error', error);
     else setEvents(events!);
     setLoading(false);
 
@@ -44,20 +43,29 @@ export default function EventList(props) {
   );
 }
 
-export function Item(props) {
+export function Item(props: any) {
   const { style, lightColor, darkColor, item, onItemPress, ...otherProps } = props;
-  const { icon, title, description } = item;
+  const { icon, key, description, customers }: EventWithCustomers = item;
   const borderColor = useThemeColor({ light: lightColor, dark: darkColor }, 'eventBorderColor');
+  const title = underscoreToTitleCase(key);
+  console.log(`Item: ${JSON.stringify(item)}`);
+  console.log(`Customers: ${JSON.stringify(customers)}`);
 
   return (
     <TouchableOpacity
       style={[{ borderBottomColor: borderColor }, styles.item]}
-      onPress={() => onItemPress(item.id)}
+      onPress={() => onItemPress(item.id, item)}
     >
       <Text style={styles.icon}>{icon}</Text>
       <View style={styles.details}>
         <Text style={styles.title}>{title}</Text>
-        <HintText style={styles.description}>{description}</HintText>
+        <View style={styles.description}>
+          {customers && customers.name && (
+            <HintText style={styles.name}>{customers.name}</HintText>)}
+          {customers && customers.email && !customers.name && (
+            <HintText style={styles.name}>{customers.email}</HintText>)}
+          <HintText>{description}</HintText>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -91,6 +99,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   description: {
-    fontSize: 12
+    flex: 1,
+    flexDirection: "row",
+  },
+  name: {
+    fontWeight: "bold",
+    marginRight: 4,
   }
-});
+});;;

@@ -17,6 +17,7 @@ import CustomersScreen from '../screens/CustomersScreen';
 import CompaniesScreen from '../screens/CompaniesScreen';
 import EventsScreen from '../screens/EventsScreen';
 import EventDetailsScreen from '../screens/EventDetailsScreen';
+import CustomerDetailsScreen from '../screens/CustomerDetailsScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 
@@ -45,8 +46,8 @@ function RootNavigator() {
   );
 }
 
-function Events(){
-  return(
+function Events() {
+  return (
     <Stack.Navigator>
       <Stack.Screen
         name="Root"
@@ -57,9 +58,37 @@ function Events(){
         }}
       />
       <Stack.Screen name="EventDetails" component={EventDetailsScreen} />
-      {/* <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="EventDetails" component={EventDetailsScreen} />
-      </Stack.Group> */}
+    </Stack.Navigator>
+  );
+}
+
+function Customers() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Root"
+        component={CustomersScreen}
+        options={{
+          title: 'Customers',
+          headerShown: true
+        }}
+      />
+      <Stack.Screen name="CustomerDetails" component={CustomerDetailsScreen} />
+    </Stack.Navigator>
+  );
+}
+
+function Companies() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Root"
+        component={CompaniesScreen}
+        options={{
+          title: 'Companies',
+          headerShown: true
+        }}
+      />
     </Stack.Navigator>
   );
 }
@@ -90,11 +119,12 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Customers"
-        component={CustomersScreen}
-        options={({ navigation }: RootTabScreenProps<'Customers'>) => ({
+        component={Customers}
+        options={{
           title: 'Customers',
+          headerShown: false,
           tabBarIcon: ({ color }) => <TabBarIcon name="address-book" solid color={color} />,
-        })}
+        }}
       />
       <BottomTab.Screen
         name="Companies"

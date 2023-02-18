@@ -17,6 +17,11 @@ const linking: LinkingOptions<RootStackParamList> = {
         screens: {
           Customers: {
             path: 'customers',
+            screens: {
+              CustomerDetails: {
+                path: ":id",
+              }
+            }
           },
           Companies: {
             path: 'companies',

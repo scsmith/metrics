@@ -9,10 +9,13 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Database } from './supabase/types';
 
 export { Database };
+export type Customer = Database['public']['Tables']['customers']['Row'];
+export type Event = Database['public']['Tables']['events']['Row'];
+export type EventWithCustomers = Event & { customers: Customer; };
 
 declare global {
   namespace ReactNavigation {
-    interface RootParamList extends RootStackParamList {}
+    interface RootParamList extends RootStackParamList { }
   }
 }
 
@@ -20,7 +23,8 @@ export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
   Modal: undefined;
   NotFound: undefined;
-  EventDetails: { id: string };
+  EventDetails: { id: string; item: EventWithCustomers; };
+  CustomerDetails: { id: string, item: Customer; };
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<

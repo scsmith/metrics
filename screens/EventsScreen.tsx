@@ -2,12 +2,13 @@ import { StyleSheet } from 'react-native';
 
 import { View } from '../components/Themed';
 import EventList from '../components/EventList';
-import { RootTabScreenProps } from '../types';
+import { EventWithCustomers, RootTabScreenProps } from '../types';
 
 export default function EventsScreen({ navigation }: RootTabScreenProps<'Events'>) {
-  const onItemPress = (id: string) => {
+  const onItemPress = (id: string, item: EventWithCustomers) => {
     console.log(`Pressed: ${id}`);
-    navigation.navigate('EventDetails', { id });
+    console.log(`Item: ${JSON.stringify(item)}`);
+    navigation.navigate('EventDetails', { id, item });
   };
 
   return (
@@ -25,4 +26,4 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
-});
+});;
