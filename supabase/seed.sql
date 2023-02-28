@@ -1,5 +1,17 @@
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+INSERT INTO auth.users (instance_id, id, aud, role, email, encrypted_password, email_confirmed_at, invited_at, confirmation_token, confirmation_sent_at, recovery_token, recovery_sent_at, email_change_token_new, email_change, email_change_sent_at, last_sign_in_at, raw_app_meta_data, raw_user_meta_data, is_super_admin, created_at, updated_at, phone, phone_confirmed_at, phone_change, phone_change_token, phone_change_sent_at, email_change_token_current, email_change_confirm_status, banned_until, reauthentication_token, reauthentication_sent_at, is_sso_user)
+    -- VALUES ('00000000-0000-0000-0000-000000000000', '20052091-1840-4099-aefd-fbfed2fc9d14', 'authenticated', 'authenticated', 'user@example.com', '', NULL, '2023-02-19 15:08:24.955077+00', '04c9b60c27da4d7eb8a02455529fa862aab5f77d45befc90ffcf9d2b', '2023-02-19 15:08:24.955077+00', '', NULL, '', '', NULL, NULL, '{"provider": "email", "providers": ["email"]}', '{}', NULL, '2023-02-19 15:08:24.948257+00', '2023-02-19 15:08:24.960456+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false);
+    VALUES ('00000000-0000-0000-0000-000000000000', '20052091-1840-4099-aefd-fbfed2fc9d14', 'authenticated', 'authenticated', 'user@example.com', '', '2023-02-19 15:10:01.880275+00', '2023-02-19 15:08:24.955077+00', '04c9b60c27da4d7eb8a02455529fa862aab5f77d45befc90ffcf9d2b', '2023-02-19 15:08:24.955077+00', '', NULL, '', '', NULL, NULL, '{"provider": "email", "providers": ["email"]}', '{}', NULL, '2023-02-19 15:08:24.948257+00', '2023-02-19 15:08:24.960456+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false);
+    -- VALUES ('00000000-0000-0000-0000-000000000000', '20052091-1840-4099-aefd-fbfed2fc9d14', 'authenticated', 'authenticated', 'user@example.com', '$2a$10$yHqWM6f1wf98cqQAbm6LiO.h9jEANim5q2YOOWL6TU96cUsMx.fxi', '2023-02-19 15:10:01.880275+00', '2023-02-19 15:08:24.955077+00', '', '2023-02-19 15:08:24.955077+00', '', NULL, '', '', NULL, '2023-02-19 15:10:01.883302+00', '{"provider": "email", "providers": ["email"]}', '{}', NULL, '2023-02-19 15:08:24.948257+00', '2023-02-19 15:10:01.892028+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false);
+
+--- Create projects
+
+
 -- Create customers
 INSERT INTO "public"."customers" ("id", "key", "name", "email", "custom_data")
 VALUES

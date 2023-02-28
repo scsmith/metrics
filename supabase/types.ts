@@ -89,12 +89,44 @@ export interface Database {
           key?: string
         }
       }
+      projects: {
+        Row: {
+          created_at: string
+          created_by: string
+          id: string
+          key: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          id?: string
+          key: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          id?: string
+          key?: string
+          name?: string
+        }
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      create_event: {
+        Args: {
+          p_customer_key: string
+          p_icon: string
+          p_key: string
+          p_description: string
+          p_custom_data: Json
+        }
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never

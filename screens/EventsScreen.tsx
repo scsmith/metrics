@@ -29,7 +29,9 @@ export function EventList(props: any) {
   const fetchData = async () => {
     let { data: events, error: callerror } = await supabase
       .from('events')
-      .select('*, customers(id, name, email)');
+      .select('*, customers(id, name, email)')
+      .order('created_at', { ascending: false })
+      .limit(100);
 
     if (callerror || !events) setError(callerror);
     else setEvents(events);
@@ -64,8 +66,8 @@ export function EventItem(props: any) {
   const { icon, key, description, customers }: EventWithCustomers = item;
   const borderColor = useThemeColor({ light: lightColor, dark: darkColor }, 'eventBorderColor');
   const title = underscoreToTitleCase(key);
-  // console.log(`Item: ${JSON.stringify(item)}`);
-  // console.log(`Customers: ${JSON.stringify(customers)}`);
+  // console.log(`Item: ${ JSON.stringify(item) }`);
+  // console.log(`Customers: ${ JSON.stringify(customers) }`);
 
   return (
     <TouchableOpacity
@@ -106,9 +108,9 @@ const styles = StyleSheet.create({
   },
   icon: {
     fontSize: 32,
-    marginHorizontal: 10,
+    marginHorizontal: 6,
     // padding: 10,
-    width: 30,
+    width: 40,
   },
   details: {
     marginHorizontal: 10,
