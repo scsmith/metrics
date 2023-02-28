@@ -44,6 +44,31 @@ export function EventList(props: any) {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const channel = supabase
+      .channel('table-db-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'events',
+        },
+        (payload) => {
+          console.log("Channel received:", payload);
+          fetchData();
+        }
+      )
+      .subscribe();
+    console.log("Channel Setup: ", channel);
+
+    return () => {
+      console.log("Ending Channel");
+      channel.unsubscribe();
+      console.log("Channel is Done");
+    };
+  }, []);
+
   if (error) return (<Error error={error} onReload={fetchData} />);
   if (loading) return (<Text>Loading...</Text>);
 
