@@ -11,7 +11,7 @@ The alternative to this setup is to use an ngrok tunnel.
 
 Inform react native of the hosts lan port:
 
-```console
+```sh
 REACT_NATIVE_PACKAGER_HOSTNAME=192.168.50.70 npx expo start
 ```
 
@@ -29,6 +29,26 @@ supabase link --project-ref
 
 ### Type Generation
 
-```console
-npx supabase gen types typescript --local > supabase/types.ts
+```sh
+npx supabase gen types typescript --local >| supabase/types.ts
+```
+
+
+## Local Builds
+
+Create a local build using:
+
+```sh
+eas build --platform ios --local
+```
+
+### Setup
+
+```sh
+# install node
+brew install node@16
+brew link node@16
+
+# install eas
+npm install -g eas-cli
 ```
