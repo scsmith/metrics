@@ -1,5 +1,6 @@
 create table "public"."customers" (
     "id" uuid not null default uuid_generate_v4(),
+    "project_id" uuid not null,
     "key" text not null,
     "name" text,
     "email" text,
@@ -11,6 +12,10 @@ create table "public"."customers" (
 -- alter table "public"."customers" enable row level security;
 
 CREATE UNIQUE INDEX customers_pkey ON public.customers USING btree (id);
+CREATE INDEX customers_project_id_idx ON public.customers USING btree (project_id);
 CREATE UNIQUE INDEX customers_key ON public.customers(key);
+
+-- Add foreign key constraint to the projects table
+alter table "public"."customers" add constraint "customers_project_id_fkey" FOREIGN KEY (project_id) REFERENCES projects(id);
 
 alter table "public"."customers" add constraint "customers_pkey" PRIMARY KEY using index "customers_pkey";

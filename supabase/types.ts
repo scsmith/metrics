@@ -42,6 +42,7 @@ export interface Database {
           id: string
           key: string
           name: string | null
+          project_id: string
         }
         Insert: {
           created_at?: string
@@ -50,6 +51,7 @@ export interface Database {
           id?: string
           key: string
           name?: string | null
+          project_id: string
         }
         Update: {
           created_at?: string
@@ -58,6 +60,7 @@ export interface Database {
           id?: string
           key?: string
           name?: string | null
+          project_id?: string
         }
       }
       events: {
@@ -69,6 +72,7 @@ export interface Database {
           icon: string | null
           id: string
           key: string
+          project_id: string
         }
         Insert: {
           created_at?: string | null
@@ -78,6 +82,7 @@ export interface Database {
           icon?: string | null
           id?: string
           key: string
+          project_id: string
         }
         Update: {
           created_at?: string | null
@@ -87,6 +92,7 @@ export interface Database {
           icon?: string | null
           id?: string
           key?: string
+          project_id?: string
         }
       }
       projects: {
@@ -119,6 +125,7 @@ export interface Database {
     Functions: {
       create_event: {
         Args: {
+          p_project_id: string
           p_customer_key: string
           p_icon: string
           p_key: string
