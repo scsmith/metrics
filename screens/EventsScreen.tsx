@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, FlatList, TouchableOpacity, RefreshControl } from 'react-native';
 
 import { EventWithCustomers, RootTabScreenProps } from '../types';
 import { View, Text, useThemeColor, HintText, Error } from '../components/Themed';
@@ -27,6 +27,7 @@ export function EventList(props: any) {
   const [error, setError] = useState<PostgrestError | null>(null);
 
   const fetchData = async () => {
+    console.log("Fetching Data");
     let { data: events, error: callerror } = await supabase
       .from('events')
       .select('*, customers(id, name, email)')
@@ -36,6 +37,7 @@ export function EventList(props: any) {
     if (callerror || !events) setError(callerror);
     else setEvents(events);
     setLoading(false);
+    console.log("Fetched");
 
     return events;
   };
@@ -77,6 +79,7 @@ export function EventList(props: any) {
       style={styles.List}
       data={events}
       keyExtractor={(item) => item.id.toString()}
+      refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchData} />}
       renderItem={({ item, index }) => {
         return (
           <EventItem item={item} onItemPress={onItemPress} />
