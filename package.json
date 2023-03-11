@@ -1,7 +1,6 @@
 {
-  "name": "metrics",
-  "version": "1.0.0",
-  "main": "node_modules/expo/AppEntry.js",
+  "name": "evented",
+  "version": "0.0.1",
   "scripts": {
     "start": "REACT_NATIVE_PACKAGER_HOSTNAME=$API_HOST expo start",
     "android": "expo run:android",

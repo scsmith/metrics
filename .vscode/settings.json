@@ -1,5 +1,6 @@
 {
   "[javascript][typescript][javascriptreact][typescriptreact]": {
     "editor.formatOnSave": true
-  }
+  },
+  "deno.enable": true
 }
