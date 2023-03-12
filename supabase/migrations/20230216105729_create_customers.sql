@@ -1,9 +1,9 @@
 create table "public"."customers" (
     "id" uuid not null default uuid_generate_v4(),
     "project_id" uuid not null,
-    "key" text not null,
+    "key" text,
     "name" text,
-    "email" text,
+    "email" text not null,
     "created_at" timestamp with time zone not null default (now() AT TIME ZONE 'utc'::text),
     "custom_data" jsonb
 );
@@ -13,7 +13,8 @@ create table "public"."customers" (
 
 CREATE UNIQUE INDEX customers_pkey ON public.customers USING btree (id);
 CREATE INDEX customers_project_id_idx ON public.customers USING btree (project_id);
-CREATE UNIQUE INDEX customers_key ON public.customers(key);
+CREATE UNIQUE INDEX customers_key ON public.customers(key) WHERE key IS NOT NULL;
+CREATE UNIQUE INDEX customers_email ON public.customers(email);
 
 -- Add foreign key constraint to the projects table
 alter table "public"."customers" add constraint "customers_project_id_fkey" FOREIGN KEY (project_id) REFERENCES projects(id);

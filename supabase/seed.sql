@@ -14,7 +14,9 @@ INSERT INTO projects (id, name, key, created_by)
 VALUES
   ('a28d53b7-46a8-496a-9d44-1f4632f0b8c1'::uuid, 'CloudMailin', 'e17d5a5e5f5a4c75b01f8ddafc9d9e9a', '20052091-1840-4099-aefd-fbfed2fc9d14'::uuid),
   ('c2f2a77d-4de4-4b3f-bd91-7986c08e6a07'::uuid, 'AttachmentScanner', '648cd858a568484b8768da28ceaa076d', '20052091-1840-4099-aefd-fbfed2fc9d14'::uuid),
-  ('15c4d7b9-562c-47ec-a047-6af64c7b0a6c'::uuid, 'Evented', 'a50e37b34a254a93954f23853d3f30f1', '20052091-1840-4099-aefd-fbfed2fc9d14'::uuid);
+  ('15c4d7b9-562c-47ec-a047-6af64c7b0a6c'::uuid, 'Evented', 'a50e37b34a254a93954f23853d3f30f1', '20052091-1840-4099-aefd-fbfed2fc9d14'::uuid),
+  ('9d1f7f2c-5b5c-49c8-926e-7f1ef61b9873'::uuid, 'test', '123e4567-e89b-12d3-a456-426655440000', '20052091-1840-4099-aefd-fbfed2fc9d14'::uuid);
+
 
 -- Create customers
 INSERT INTO "public"."customers" ("id", "key", "name", "email", "custom_data", "project_id")
