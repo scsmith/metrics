@@ -1,20 +1,21 @@
 import { SupabaseClient } from "@supabase/supabase-js";
+import { isEmail } from "https://deno.land/x/validate_patoui@v0.4.1/mod.ts";
 
 export const customerHandler = async (req: Request, id: string | undefined, supabaseAdmin: SupabaseClient) => {
   const { customer_key, customer_name, customer_email, custom_data }: {
     customer_key?: string,
     customer_name?: string,
-    customer_email?: string,
+    customer_email: string,
     custom_data: object;
   } = await req.json();
 
   // Check that either customer_key or customer_email is present
-  // if (!customer_key && !customer_email) {
-  //   return new Response(
-  //     JSON.stringify({ error: 'Both customer_key and customer_email cannot be null' }),
-  //     { headers: { "Content-Type": "application/json" }, status: 422 }
-  //   );
-  // }
+  if (!customer_email || !isEmail(customer_email)) {
+    return new Response(
+      JSON.stringify({ error: 'Email must be valid' }),
+      { headers: { "Content-Type": "application/json" }, status: 422 }
+    );
+  }
 
   // Call the upsert_customer function using the Supabase client
   let { data, error } = await supabaseAdmin

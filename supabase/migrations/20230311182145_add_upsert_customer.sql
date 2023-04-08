@@ -9,8 +9,8 @@ DECLARE
     customer_id uuid;
 BEGIN
     -- Remove leading and trailing whitespace from p_customer_key and p_customer_email, and treat any number of blank spaces as NULL
-    p_customer_key := NULLIF(trim(p_customer_key), '');
-    p_customer_email := NULLIF(trim(p_customer_email), '');
+    p_customer_key := NULLIF(trim(LOWER(p_customer_key)), '');
+    p_customer_email := NULLIF(trim(LOWER(p_customer_email)), '');
     p_customer_name := NULLIF(trim(p_customer_name), '');
 
     -- Check that either customer_key or customer_email is present and not empty
